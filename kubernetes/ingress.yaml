@@ -1,0 +1,34 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: global-pay-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: api.globalpay.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: global-pay-service
+            port:
+              number: 80
+  - host: api-staging.globalpay.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: global-pay-service
+            port:
+              number: 80
+  tls:
+  - hosts:
+    - api.globalpay.com
+    - api-staging.globalpay.com
+    secretName: global-pay-tls
